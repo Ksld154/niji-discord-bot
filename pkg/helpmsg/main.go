@@ -1,29 +1,52 @@
 package helpmsg
 
 import (
+	"math/rand"
+
 	"github.com/bwmarrin/discordgo"
 )
+
+func getScheduleThumbnail() string {
+	thumbnailList := []string{
+		"https://i.imgur.com/BRokk77.png",
+		"https://i.imgur.com/uylS55f.png",
+		"https://i.imgur.com/pbz7OXY.png",
+	}
+
+	idx := rand.Intn(len(thumbnailList))
+
+	return thumbnailList[idx]
+}
 
 // BuildHelpMsg returns a embed of cmd description
 func BuildHelpMsg() discordgo.MessageEmbed {
 	var helpEmbed discordgo.MessageEmbed
-	helpEmbed.Title = "$help"
+	helpEmbed.Title = "$maru"
+	helpEmbed.Color = 0xffdd00
+
+	var embedMsgThumbnail discordgo.MessageEmbedThumbnail
+	embedMsgThumbnail.URL = getScheduleThumbnail()
+	helpEmbed.Thumbnail = &embedMsgThumbnail
 
 	var helpAuthor discordgo.MessageEmbedAuthor
 	helpAuthor.Name = "Marumaru"
 	helpAuthor.URL = "https://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w"
-	helpAuthor.IconURL = "https://i.imgur.com/xPiRLCv.png"
+	helpAuthor.IconURL = "https://i.imgur.com/BRokk77.png"
 	helpEmbed.Author = &helpAuthor
 
 	botCmd := []string{
 		"$niji",
+		"$sui / $inui / $watame",
 		"$ip",
-		"$gif",
+		"$uptime",
+		"$onair",
 	}
 	botCmdDescription := map[string]string{
-		"$niji": "List 2434 schedule",
-		"$ip":   "IP address of marumaru",
-		"$gif":  "WIP",
+		"$niji":                  "List 2434 schedule",
+		"$sui / $inui / $watame": "Randomly pickup a suisui/inui/watame song",
+		"$ip":                    "IP address of marumaru",
+		"$uptime":                "Uptime of marumaru",
+		"$onair":                 "WIP",
 	}
 
 	for _, cmd := range botCmd {
@@ -42,7 +65,3 @@ func BuildHelpMsg() discordgo.MessageEmbed {
 
 	return helpEmbed
 }
-
-// func main() {
-// 	fmt.Println("Hello, help")
-// }

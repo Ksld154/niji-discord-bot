@@ -6,11 +6,15 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"strings"
 	"syscall"
+	"time"
 
-	"github.com/Ksld154/niji-discord-bot/pkg/getip"
 	"github.com/Ksld154/niji-discord-bot/pkg/helpmsg"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijiparser"
+	"github.com/Ksld154/niji-discord-bot/pkg/utils"
+	"github.com/Ksld154/niji-discord-bot/pkg/ytpicker"
+
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -26,13 +30,17 @@ func main() {
 	}
 
 	dg.AddHandler(messageCreate)
-	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 
+	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
+	utils.BotStartTime = time.Now()
+
+	dg.UpdateStatus(0, "$maru")
 
 	fmt.Println("Bot is running. Press Ctrl-C to exit.")
 
@@ -46,6 +54,13 @@ func main() {
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
+	m.Content = strings.ToLower(m.Content)
+	m.Content = strings.TrimSpace(m.Content)
+	messageArgs := strings.Split(m.Content, " ")
+	// fmt.Println(m.Content)
+	// fmt.Println(messageArgs)
+	// fmt.Println(len(m.Mentions))
+
 	if m.Author.ID == s.State.SessionID {
 		return
 	} else if m.Content == "$ping" {
@@ -57,13 +72,29 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		schedule := nijiparser.NijiScheduleParser()
 		s.ChannelMessageSendEmbed(m.ChannelID, &schedule)
 	} else if m.Content == "$ip" {
-		localIPAddr := getip.GetOutBOundIPAddr()
+		localIPAddr := utils.GetOutBoundIPAddr()
 		s.ChannelMessageSend(m.ChannelID, localIPAddr)
 	} else if m.Content == "$demo" {
-		s.ChannelMessageSend(m.ChannelID, "🐰")
-		s.ChannelMessageSend(m.ChannelID, ":rabbit:")
+		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@"+m.Author.ID+">")
+	} else if m.Content == "$sui" {
+		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("sui", "PLarzPAXT9RrpT2W_KUTOzNfaYZ4Qs9_-D"))
+	} else if m.Content == "$watame" {
+		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("watame", "PLZ34fLWik_iB_cdmHivl8xhMJW6JwIkNn"))
+	} else if m.Content == "$inui" {
+		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("inui", "PLp93VJ2iFLMJiHM_0FXfjljA8oyu_lXuS"))
 	} else if m.Content == "$gif" {
 		s.ChannelMessageSend(m.ChannelID, "Please upgrade to monthly plan <:Arisu:735409267133382659> \nhttps://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w/join")
+	} else if m.Content == "$onair" {
+		s.ChannelMessageSend(m.ChannelID, "https://nijisanji.net/lives/")
+	} else if m.Content == "$uptime" {
+		s.ChannelMessageSend(m.ChannelID, utils.GetUpTime())
+	} else if m.Content == "$maru" || m.Content == "$marumaru" {
+		s.ChannelMessageSend(m.ChannelID, "<:ars2:736167952348479508>")
+		help := helpmsg.BuildHelpMsg()
+		s.ChannelMessageSendEmbed(m.ChannelID, &help)
+	} else if messageArgs[0] == "$kick" && len(m.Mentions) == 1 {
+		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/ayame-hololive-nakiri-ayame-animated-kick-gif-17904529")
+		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@!"+m.Mentions[0].ID+">"+" is kicked ")
 	} else if ok, _ := regexp.MatchString("^\\$.+", m.Content); ok {
 		s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
 	}
