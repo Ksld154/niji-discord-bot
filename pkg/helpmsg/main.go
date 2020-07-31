@@ -36,17 +36,21 @@ func BuildHelpMsg() discordgo.MessageEmbed {
 
 	botCmd := []string{
 		"$niji",
+		"$onair",
 		"$sui / $inui / $watame",
 		"$ip",
 		"$uptime",
-		"$onair",
+		"$activity [status]",
+		"$kick [@user]",
 	}
 	botCmdDescription := map[string]string{
 		"$niji":                  "List 2434 schedule",
+		"$onair":                 "List 2434 on-air streaming",
 		"$sui / $inui / $watame": "Randomly pickup a suisui/inui/watame song",
 		"$ip":                    "IP address of marumaru",
 		"$uptime":                "Uptime of marumaru",
-		"$onair":                 "WIP",
+		"$activity [status]":     "Set marumaru status",
+		"$kick [@user]":          "Ayame kick",
 	}
 
 	for _, cmd := range botCmd {

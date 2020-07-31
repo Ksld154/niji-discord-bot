@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/Ksld154/niji-discord-bot/pkg/helpmsg"
+	"github.com/Ksld154/niji-discord-bot/pkg/nijionair"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijiparser"
 	"github.com/Ksld154/niji-discord-bot/pkg/utils"
 	"github.com/Ksld154/niji-discord-bot/pkg/ytpicker"
@@ -85,7 +86,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if m.Content == "$gif" {
 		s.ChannelMessageSend(m.ChannelID, "Please upgrade to monthly plan <:Arisu:735409267133382659> \nhttps://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w/join")
 	} else if m.Content == "$onair" {
-		s.ChannelMessageSend(m.ChannelID, "https://nijisanji.net/lives/")
+		// s.ChannelMessageSend(m.ChannelID, "https://nijisanji.net/lives/")
+		onair := nijionair.GetNijiOnAir()
+		s.ChannelMessageSendEmbed(m.ChannelID, &onair)
 	} else if m.Content == "$uptime" {
 		s.ChannelMessageSend(m.ChannelID, utils.GetUpTime())
 	} else if m.Content == "$maru" || m.Content == "$marumaru" {
@@ -95,6 +98,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if messageArgs[0] == "$kick" && len(m.Mentions) == 1 {
 		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/ayame-hololive-nakiri-ayame-animated-kick-gif-17904529")
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@!"+m.Mentions[0].ID+">"+" is kicked ")
+	} else if messageArgs[0] == "$activity" && len(messageArgs) == 2 {
+		s.UpdateStatus(0, messageArgs[1])
+		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: ")
 	} else if ok, _ := regexp.MatchString("^\\$.+", m.Content); ok {
 		s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
 	}

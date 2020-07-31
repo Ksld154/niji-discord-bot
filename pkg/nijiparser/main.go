@@ -40,7 +40,8 @@ type streamInfoSimple struct {
 	URL   string
 }
 
-func getLiverEmoji(liver string) string {
+// GetLiverEmoji return the emoji of given nijisanji-liver's JP name
+func GetLiverEmoji(liver string) string {
 
 	emojiMap := map[string]string{
 		"月ノ美兎":         "🐰",
@@ -235,7 +236,7 @@ func buildEmbedMsg(timeKeys []string, schedule map[string][]streamInfoSimple) di
 		streamObj.Name = key
 		streamObj.Value = ""
 		for _, stream := range schedule[key] {
-			streamObjLink := fmt.Sprintf("[%s%s](%s) \n", getLiverEmoji(stream.Liver), stream.Liver, stream.URL)
+			streamObjLink := fmt.Sprintf("[%s%s](%s) \n", GetLiverEmoji(stream.Liver), stream.Liver, stream.URL)
 			streamObj.Value += streamObjLink
 		}
 

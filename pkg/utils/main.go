@@ -35,3 +35,8 @@ func GetOutBoundIPAddr() string {
 
 	return string(body)
 }
+
+// func SetActivity(activity string) string {
+
+// 	return nil
+// }
