@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Ksld154/niji-discord-bot/pkg/bitly"
 	"github.com/Ksld154/niji-discord-bot/pkg/helpmsg"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijionair"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijiparser"
@@ -31,7 +32,6 @@ func main() {
 	}
 
 	dg.AddHandler(messageCreate)
-
 	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
@@ -40,11 +40,11 @@ func main() {
 	}
 
 	utils.BotStartTime = time.Now()
+	bitly.BitlyToken = os.Getenv("BITLY_TOKEN")
 
 	dg.UpdateStatus(0, "$maru")
 
-	fmt.Println("Bot is running. Press Ctrl-C to exit.")
-
+	fmt.Println("Bot is running.")
 	defer func() {
 		sc := make(chan os.Signal, 1)
 		signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
@@ -55,9 +55,10 @@ func main() {
 
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	m.Content = strings.ToLower(m.Content)
 	m.Content = strings.TrimSpace(m.Content)
 	messageArgs := strings.Split(m.Content, " ")
+
+	m.Content = strings.ToLower(m.Content)
 	// fmt.Println(m.Content)
 	// fmt.Println(messageArgs)
 	// fmt.Println(len(m.Mentions))
@@ -98,6 +99,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if messageArgs[0] == "$kick" && len(m.Mentions) == 1 {
 		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/ayame-hololive-nakiri-ayame-animated-kick-gif-17904529")
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@!"+m.Mentions[0].ID+">"+" is kicked ")
+	} else if messageArgs[0] == "$short" && len(messageArgs) == 2 {
+		shortURL, err := bitly.GetShortURL(messageArgs[1])
+		if err != nil {
+			s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
+		}
+		s.ChannelMessageSend(m.ChannelID, shortURL)
 	} else if messageArgs[0] == "$activity" && len(messageArgs) == 2 {
 		s.UpdateStatus(0, messageArgs[1])
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: ")
