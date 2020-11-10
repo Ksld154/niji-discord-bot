@@ -86,8 +86,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("inui", "PLp93VJ2iFLMJiHM_0FXfjljA8oyu_lXuS"))
 	} else if m.Content == "$gif" {
 		s.ChannelMessageSend(m.ChannelID, "Please upgrade to monthly plan <:Arisu:735409267133382659> \nhttps://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w/join")
-	} else if m.Content == "$onair" {
-		// s.ChannelMessageSend(m.ChannelID, "https://nijisanji.net/lives/")
+	} else if m.Content == "$onair" || m.Content == "$o" {
 		onair := nijionair.GetNijiOnAir()
 		s.ChannelMessageSendEmbed(m.ChannelID, &onair)
 	} else if m.Content == "$uptime" {
@@ -99,6 +98,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if messageArgs[0] == "$kick" && len(m.Mentions) == 1 {
 		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/ayame-hololive-nakiri-ayame-animated-kick-gif-17904529")
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@!"+m.Mentions[0].ID+">"+" is kicked ")
+	} else if messageArgs[0] == "$avatar" && len(m.Mentions) == 1 {
+		s.ChannelMessageSend(m.ChannelID, m.Mentions[0].AvatarURL("512"))
 	} else if messageArgs[0] == "$short" && len(messageArgs) == 2 {
 		shortURL, err := bitly.GetShortURL(messageArgs[1])
 		if err != nil {

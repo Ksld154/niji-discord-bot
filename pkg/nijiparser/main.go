@@ -146,6 +146,11 @@ func GetLiverEmoji(liver string) string {
 		"空星きらめ":        "🌌",
 		"金魚坂めいろ":       "🩰",
 		"にじさんじ公式チャンネル": "🌈🕒",
+		"朝日南アカネ":       "🦖🎖",
+		"周央サンゴ":        "💞🦩",
+		"東堂コハク":        "🍯",
+		"北小路ヒスイ":       "❇",
+		"西園チグサ":        "🐬🌱",
 	}
 
 	return emojiMap[liver]
@@ -168,10 +173,13 @@ func getScheduleThumbnail() string {
 
 func parseJSON(jsonBody []byte) ([]string, map[string][]streamInfoSimple) {
 
-	// var schedule map[string][]streamInfoSimple
-	schedule := make(map[string][]streamInfoSimple, 50)
+	schedule := make(map[string][]streamInfoSimple, 100)
 
 	oneHourAgo := time.Now().Add(-1 * time.Hour)
+	twTimeZone, err := time.LoadLocation("Asia/Taipei")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	var payload jsonResponse
 	json.Unmarshal(jsonBody, &payload)
@@ -189,14 +197,15 @@ func parseJSON(jsonBody []byte) ([]string, map[string][]streamInfoSimple) {
 		}
 
 		// change streamTime obj's timezone first
-		streamTime = streamTime.Local()
+		twStreamTime := streamTime.In(twTimeZone)
 		if streamTime.Before(oneHourAgo) {
 			continue
 		}
 
 		formattedStreamTime := fmt.Sprintf("%02d/%02d %02d:%02d",
-			streamTime.Month(), streamTime.Day(),
-			streamTime.Hour(), streamTime.Minute())
+			twStreamTime.Month(), twStreamTime.Day(),
+			twStreamTime.Hour(), twStreamTime.Minute(),
+		)
 
 		var streamObj streamInfoSimple
 		streamObj.Liver = stream.Liver[0].Name
@@ -224,11 +233,6 @@ func buildEmbedMsg(timeKeys []string, schedule map[string][]streamInfoSimple) di
 	var embedMsgThumbnail discordgo.MessageEmbedThumbnail
 	embedMsgThumbnail.URL = getScheduleThumbnail()
 	scheduleEmbed.Thumbnail = &embedMsgThumbnail
-
-	// var emptyObj discordgo.MessageEmbedField
-	// emptyObj.Name = "\u200b"
-	// emptyObj.Value = "\u200b"
-	// scheduleEmbed.Fields = append(scheduleEmbed.Fields, &emptyObj)
 
 	for _, key := range timeKeys {
 		var streamObj discordgo.MessageEmbedField

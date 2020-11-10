@@ -3,6 +3,7 @@ package nijionair
 import (
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/Ksld154/niji-discord-bot/pkg/nijiparser"
 	"github.com/anaskhan96/soup"
@@ -41,9 +42,12 @@ func nijiOnAirScrapper() []OnAirStream {
 		onAirLivers = onAirLivers[:len(onAirLivers)-1]
 	}
 
-	links := doc.FindAllStrict("div", "class", "ui embed")
+	links := doc.FindAllStrict("div", "class", "player embed")
 	for _, link := range links {
-		OnAirLinks = append(OnAirLinks, link.Attrs()["data-id"])
+
+		youtubeID := strings.Split(link.Attrs()["id"], "player-")[1]
+		// fmt.Println(youtubeID)
+		OnAirLinks = append(OnAirLinks, youtubeID)
 	}
 
 	icons := doc.FindAllStrict("img", "class", "ui avatar image")
