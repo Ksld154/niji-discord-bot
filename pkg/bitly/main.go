@@ -25,7 +25,7 @@ type shortURLObject struct {
 }
 
 // GetShortURL returns the URL shorten by Bitly service
-func GetShortURL(longURL string) (string, error) {
+func GetShortURL(longURL string, endPoint string) (string, error) {
 
 	// fmt.Println(longURL)
 	urlPattern, err := regexp.Compile(urlRegexp)
@@ -34,18 +34,19 @@ func GetShortURL(longURL string) (string, error) {
 	}
 
 	if urlPattern.MatchString(longURL) {
-		shortURL, err := shortenURL(longURL)
+		shortURL, err := shortenURL(longURL, endPoint)
 		if err != nil {
 			return "", err
 		}
 		return shortURL, nil
 	}
 
+	fmt.Println("url formal err")
 	err = fmt.Errorf("url format error")
 	return "", err
 }
 
-func shortenURL(longURL string) (string, error) {
+func shortenURL(longURL string, endPoint string) (string, error) {
 
 	data := map[string]string{"long_url": longURL}
 	jsonPayload, err := json.Marshal(data)
@@ -53,9 +54,11 @@ func shortenURL(longURL string) (string, error) {
 		return "", err
 	}
 
+	fmt.Println(endPoint)
+
 	// send POST request to bitly api
 	client := &http.Client{}
-	req, err := http.NewRequest("POST", bitlyEndPoint, bytes.NewBuffer(jsonPayload))
+	req, err := http.NewRequest("POST", endPoint, bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		return "", err
 	}
@@ -67,9 +70,9 @@ func shortenURL(longURL string) (string, error) {
 	}
 	defer resp.Body.Close()
 
-	// fmt.Println(resp.StatusCode)
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		err = fmt.Errorf("Bitly resp code: %d", resp.StatusCode)
+	fmt.Println(resp.StatusCode)
+	if resp.StatusCode > 299 {
+		err = fmt.Errorf("[Error] bitly resp code: %d", resp.StatusCode)
 		return "", err
 	}
 
