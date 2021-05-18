@@ -20,6 +20,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+const (
+	bitlyEndPoint = "https://api-ssl.bitly.com/v4/shorten"
+)
+
 var botToken string = os.Getenv("DISCORD_BOT_TOKEN")
 
 func main() {
@@ -96,12 +100,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		help := helpmsg.BuildHelpMsg()
 		s.ChannelMessageSendEmbed(m.ChannelID, &help)
 	} else if messageArgs[0] == "$kick" && len(m.Mentions) == 1 {
-		s.ChannelMessageSend(m.ChannelID, "https://tenor.com/view/ayame-hololive-nakiri-ayame-animated-kick-gif-17904529")
+		s.ChannelMessageSend(m.ChannelID, "https://imgur.com/q90jFeM")
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@!"+m.Mentions[0].ID+">"+" is kicked ")
 	} else if messageArgs[0] == "$avatar" && len(m.Mentions) == 1 {
 		s.ChannelMessageSend(m.ChannelID, m.Mentions[0].AvatarURL("512"))
 	} else if messageArgs[0] == "$short" && len(messageArgs) == 2 {
-		shortURL, err := bitly.GetShortURL(messageArgs[1])
+
+		// client := &http.Client{}
+		shortURL, err := bitly.GetShortURL(messageArgs[1], bitlyEndPoint)
 		if err != nil {
 			s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
 		}
