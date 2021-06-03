@@ -11,7 +11,7 @@ import (
 var BotStartTime time.Time
 
 // GetUpTime return the execution time of bot
-func GetUpTime() string {
+func GetUpTime(BotStartTime time.Time) string {
 	nowTime := time.Now()
 	diff := nowTime.Sub(BotStartTime)
 
@@ -19,13 +19,18 @@ func GetUpTime() string {
 }
 
 // GetOutBoundIPAddr return IP address of bot
-func GetOutBoundIPAddr() string {
-	resp, err := http.Get("https://ifconfig.me")
+func GetOutBoundIPAddr(url string) string {
+	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 		return ""
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode > 299 {
+		// err = fmt.Errorf("[Error] bitly resp code: %d", resp.StatusCode)
+		return ""
+	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
@@ -35,8 +40,3 @@ func GetOutBoundIPAddr() string {
 
 	return string(body)
 }
-
-// func SetActivity(activity string) string {
-
-// 	return nil
-// }

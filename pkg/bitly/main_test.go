@@ -11,8 +11,6 @@ import (
 )
 
 func Test_shortenURL(t *testing.T) {
-	// os.Setenv("BITLY_TOKEN", "073addcf92f5e5009c2163c4f90b6cebeba9228c")
-	// defer os.Unsetenv("BITLY_TOKEN")
 
 	type args struct {
 		longURL string
@@ -63,7 +61,6 @@ func Test_shortenURL(t *testing.T) {
 		successResp := []byte(`{"link": "https://bit.ly/3byvFEv"}`)
 		failResp := []byte{}
 		if requestFields["long_url"] == "https://www.youtube.com/" {
-
 			rw.WriteHeader(http.StatusOK)
 			rw.Write(successResp)
 		} else {
@@ -77,8 +74,8 @@ func Test_shortenURL(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 
 			got, err := shortenURL(tt.args.longURL, testServer.URL)
-
 			fmt.Println()
+
 			if (err != nil) != tt.wantErr {
 				t.Errorf("shortenURL() error = %v, wantErr %v", err, tt.wantErr)
 				return

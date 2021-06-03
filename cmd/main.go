@@ -78,7 +78,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		schedule := nijiparser.NijiScheduleParser()
 		s.ChannelMessageSendEmbed(m.ChannelID, &schedule)
 	} else if m.Content == "$ip" {
-		localIPAddr := utils.GetOutBoundIPAddr()
+		localIPAddr := utils.GetOutBoundIPAddr("https://ifconfig.me")
 		s.ChannelMessageSend(m.ChannelID, localIPAddr)
 	} else if m.Content == "$demo" {
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@"+m.Author.ID+">")
@@ -94,7 +94,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		onair := nijionair.GetNijiOnAir()
 		s.ChannelMessageSendEmbed(m.ChannelID, &onair)
 	} else if m.Content == "$uptime" {
-		s.ChannelMessageSend(m.ChannelID, utils.GetUpTime())
+		s.ChannelMessageSend(m.ChannelID, utils.GetUpTime(utils.BotStartTime))
 	} else if m.Content == "$maru" || m.Content == "$marumaru" {
 		s.ChannelMessageSend(m.ChannelID, "<:ars2:736167952348479508>")
 		help := helpmsg.BuildHelpMsg()
