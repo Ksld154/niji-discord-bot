@@ -45,13 +45,13 @@ func parseJSON(httpResp []byte) string {
 	return payload.NextPageToken
 }
 
-func getYoutubePlaylistItems(playListID string, pageToken string) (string, error) {
+func getYoutubePlaylistItems(endPoint string, playListID string, pageToken string) (string, error) {
 
 	client := &http.Client{}
 	youtubeAPIKey := os.Getenv("YOUTUBE_API_KEY")
 	// fmt.Println(youtubeAPIKey)
 
-	req, err := http.NewRequest("GET", "https://www.googleapis.com/youtube/v3/playlistItems", nil)
+	req, err := http.NewRequest("GET", endPoint, nil)
 	if err != nil {
 		return "", err
 	}
@@ -90,13 +90,13 @@ func pickupVideo() string {
 }
 
 // GetRandomSong randomly pick up a video from the given playlist
-func GetRandomSong(liver string, playListID string) string {
+func GetRandomSong(endPoint string, playListID string) string {
 	fmt.Println("suisui")
 
 	// do all http request first
 	pageToken := ""
 	for {
-		nextPageToken, err := getYoutubePlaylistItems(playListID, pageToken)
+		nextPageToken, err := getYoutubePlaylistItems(endPoint, playListID, pageToken)
 		// fmt.Println(nextPageToken)
 		if err != nil {
 			log.Fatal(err)
