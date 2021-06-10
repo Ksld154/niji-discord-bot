@@ -13,7 +13,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const url string = "https://api.itsukaralink.jp/v1.2/events.json"
+// const url string = "https://api.itsukaralink.jp/v1.2/events.json"
 
 type liverInfo struct {
 	Name string `json:"name"`
@@ -195,12 +195,13 @@ func parseJSON(jsonBody []byte) ([]string, map[string][]streamInfoSimple) {
 			log.Fatal(err)
 			continue
 		}
-
+		fmt.Println(streamTime)
 		// change streamTime obj's timezone first
 		twStreamTime := streamTime.In(twTimeZone)
 		if streamTime.Before(oneHourAgo) {
 			continue
 		}
+		fmt.Println(streamTime)
 
 		formattedStreamTime := fmt.Sprintf("%02d/%02d %02d:%02d",
 			twStreamTime.Month(), twStreamTime.Day(),
@@ -256,10 +257,10 @@ func buildEmbedMsg(timeKeys []string, schedule map[string][]streamInfoSimple) di
 }
 
 // NijiScheduleParser should return embed msg that contain nijisanji schedule
-func NijiScheduleParser() discordgo.MessageEmbed {
+func NijiScheduleParser(endpoint string) discordgo.MessageEmbed {
 	fmt.Println("### 2434 Schedule Parser! ###")
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(endpoint)
 	if err != nil {
 		log.Fatal(err)
 		return discordgo.MessageEmbed{}

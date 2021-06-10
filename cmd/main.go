@@ -21,7 +21,10 @@ import (
 )
 
 const (
-	bitlyEndPoint = "https://api-ssl.bitly.com/v4/shorten"
+	bitlyEndPoint           = "https://api-ssl.bitly.com/v4/shorten"
+	youtubePlayListEndPoint = "https://www.googleapis.com/youtube/v3/playlistItems"
+	youtubeSuiseiID         = "PLarzPAXT9RrpT2W_KUTOzNfaYZ4Qs9_-D"
+	nijiScheduleEndPoint    = "https://api.itsukaralink.jp/v1.2/events.json"
 )
 
 var botToken string = os.Getenv("DISCORD_BOT_TOKEN")
@@ -75,7 +78,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		help := helpmsg.BuildHelpMsg()
 		s.ChannelMessageSendEmbed(m.ChannelID, &help)
 	} else if m.Content == "$niji" {
-		schedule := nijiparser.NijiScheduleParser()
+		schedule := nijiparser.NijiScheduleParser(nijiScheduleEndPoint)
 		s.ChannelMessageSendEmbed(m.ChannelID, &schedule)
 	} else if m.Content == "$ip" {
 		localIPAddr := utils.GetOutBoundIPAddr("https://ifconfig.me")
@@ -83,7 +86,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if m.Content == "$demo" {
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@"+m.Author.ID+">")
 	} else if m.Content == "$sui" {
-		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("sui", "PLarzPAXT9RrpT2W_KUTOzNfaYZ4Qs9_-D"))
+		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong(youtubePlayListEndPoint, youtubeSuiseiID))
 	} else if m.Content == "$watame" {
 		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("watame", "PLZ34fLWik_iB_cdmHivl8xhMJW6JwIkNn"))
 	} else if m.Content == "$inui" {

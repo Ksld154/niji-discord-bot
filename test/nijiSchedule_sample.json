@@ -1,0 +1,27 @@
+{
+    "status": "ok",
+    "data": {
+        "events": [
+            {
+                "id": 49178,
+                "name": "【 雑談】エビマル３Dコラボのあれこれの話【アルス・アルマル/にじさんじ】",
+                "description": "◇販売中◇ \n【ジューンブライドボイス2021】2021年6月30日(水)23:59まで\nhttps://shop.nijisanji.jp/s/niji/item/detail/dig-00399?ima=4949\n\n―――――――――――――――――――――――――\n ＃アルマルーム　でツイートしてね！\n切り抜き師募集してます！！詳しくはツイッターへ\n【Twitter】https://twitter.com/ars_almal\n\n【アルス・アルマルグッズ】\nhttps://shop.nijisanji.jp/s/niji/artist/074/item?ima=0200\n\n【メンバーシップ】スマホからでもできるよ！\nhttps://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w/join\n―――――――――――――――――――――――――\n【ぼくからのお願い】\n人を不快にさせるコメント、視聴者同士の会話、またそれらへの注意はトラブルの原因になりますのでご遠慮ください。\n視聴者が気持ちよく見れるように、コメント削除やブロックにて対処させていただくことがあります。\n\n【ANYCOLOR二次創作ガイドライン】\nhttps://event.nijisanji.app/guidelines/\n―――――――――――――――――――――――――\nBGM",
+                "public": 1,
+                "url": "https://www.youtube.com/watch?v=er6BElZ2X9Y",
+                "thumbnail": "https://i.ytimg.com/vi/er6BElZ2X9Y/maxresdefault_live.jpg",
+                "start_date": "2037-06-09T00:00:00.000+09:00",
+                "end_date": "2037-06-09T01:00:00.000+09:00",
+                "recommend": false,
+                "genre": null,
+                "livers": [
+                    {
+                        "id": 87,
+                        "name": "アルス・アルマル",
+                        "avatar": "https://s3-ap-northeast-1.amazonaws.com/liver-icons/400x400/Ars_Almal_200601.png",
+                        "color": "#7fd6e2"
+                    }
+                ]
+            }            
+        ]
+    }
+}
