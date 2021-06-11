@@ -19,24 +19,32 @@ jobs:
       with:
         go-version: 1.14.x
 
+
     - name: Build the code
       run: make build
 
-    # - name: Test
-    #   run: make test
 
   test:
     needs: build
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.14
   
-    - name: Test some necessary packages
-      run: make test
+    - name: Grant execute permission for test.sh
+      run: chmod +x test.sh
 
+    - name: Test some necessary packages
+      run: test.sh
+
+    - name: Upload Coverage report to CodeCov
+      uses: codecov/codecov-action@v1.0.0
+      with:
+        token: ${{secrets.CODECOV_TOKEN}}
+        file: ./coverage.txt
