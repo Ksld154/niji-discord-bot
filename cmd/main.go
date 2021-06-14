@@ -87,10 +87,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: "+"<@"+m.Author.ID+">")
 	} else if m.Content == "$sui" {
 		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong(youtubePlayListEndPoint, youtubeSuiseiID))
-	} else if m.Content == "$watame" {
-		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("watame", "PLZ34fLWik_iB_cdmHivl8xhMJW6JwIkNn"))
-	} else if m.Content == "$inui" {
-		s.ChannelMessageSend(m.ChannelID, ytpicker.GetRandomSong("inui", "PLp93VJ2iFLMJiHM_0FXfjljA8oyu_lXuS"))
 	} else if m.Content == "$gif" {
 		s.ChannelMessageSend(m.ChannelID, "Please upgrade to monthly plan <:Arisu:735409267133382659> \nhttps://www.youtube.com/channel/UCdpUojq0KWZCN9bxXnZwz5w/join")
 	} else if m.Content == "$onair" || m.Content == "$o" {

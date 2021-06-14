@@ -37,7 +37,7 @@ func BuildHelpMsg() discordgo.MessageEmbed {
 	botCmd := []string{
 		"$niji",
 		"$onair",
-		"$sui / $inui / $watame",
+		"$sui",
 		"$short [url]",
 		"$avatar [@user]",
 		"$ip",
@@ -46,15 +46,15 @@ func BuildHelpMsg() discordgo.MessageEmbed {
 		"$kick [@user]",
 	}
 	botCmdDescription := map[string]string{
-		"$niji":                  "List 2434 schedule",
-		"$onair":                 "List 2434 on-air streaming",
-		"$sui / $inui / $watame": "Randomly pickup a suisui/inui/watame song",
-		"$short [url]":           "Shorten URL by Bitly",
-		"$avatar [@user]":        "Avatar of a user",
-		"$ip":                    "IP address of marumaru",
-		"$uptime":                "Uptime of marumaru",
-		"$activity [status]":     "Set marumaru status",
-		"$kick [@user]":          "Ayame kick",
+		"$niji":              "List 2434 schedule",
+		"$onair":             "List 2434 on-air streaming",
+		"$sui":               "Randomly pickup a suisei's song",
+		"$short [url]":       "Shorten URL by Bitly",
+		"$avatar [@user]":    "Avatar of a user",
+		"$ip":                "IP address of marumaru",
+		"$uptime":            "Uptime of marumaru",
+		"$activity [status]": "Set marumaru status",
+		"$kick [@user]":      "Ayame kick",
 	}
 
 	for _, cmd := range botCmd {

@@ -195,13 +195,13 @@ func parseJSON(jsonBody []byte) ([]string, map[string][]streamInfoSimple) {
 			log.Fatal(err)
 			continue
 		}
-		fmt.Println(streamTime)
+		// fmt.Println(streamTime)
 		// change streamTime obj's timezone first
 		twStreamTime := streamTime.In(twTimeZone)
 		if streamTime.Before(oneHourAgo) {
 			continue
 		}
-		fmt.Println(streamTime)
+		// fmt.Println(streamTime)
 
 		formattedStreamTime := fmt.Sprintf("%02d/%02d %02d:%02d",
 			twStreamTime.Month(), twStreamTime.Day(),

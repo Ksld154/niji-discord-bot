@@ -24,7 +24,7 @@ func nijiOnAirScrapper() []OnAirStream {
 	var onAirLiverIcons []string
 	var OnAirLinks []string
 
-	resp, err := soup.Get("https://nijisanji.vtubervideo.net/lives")
+	resp, err := soup.Get("https://nijisanji.vtubervideo.net/lives/onair/nijisanji")
 	if err != nil {
 		log.Fatal(err)
 		return nil
@@ -71,7 +71,7 @@ func nijiOnAirScrapper() []OnAirStream {
 func buildOnAirEmbed(streams []OnAirStream) discordgo.MessageEmbed {
 	var onAirEmbed discordgo.MessageEmbed
 	onAirEmbed.Title = "🌈 2434 On-Air Streaming"
-	onAirEmbed.URL = "https://nijisanji.vtubervideo.net/lives"
+	onAirEmbed.URL = "https://nijisanji.vtubervideo.net/lives/onair/nijisanji"
 	onAirEmbed.Color = 0xffdd00
 
 	var streamObj discordgo.MessageEmbedField
