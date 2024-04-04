@@ -8,12 +8,12 @@ import (
 	"regexp"
 	"strings"
 	"syscall"
-	"time"
 
 	"github.com/Ksld154/niji-discord-bot/pkg/bitly"
 	"github.com/Ksld154/niji-discord-bot/pkg/helpmsg"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijionair"
 	"github.com/Ksld154/niji-discord-bot/pkg/nijiparser"
+	"github.com/Ksld154/niji-discord-bot/pkg/tetrio"
 	"github.com/Ksld154/niji-discord-bot/pkg/utils"
 	"github.com/Ksld154/niji-discord-bot/pkg/ytpicker"
 
@@ -31,6 +31,7 @@ func main() {
 
 	dg, err := discordgo.New("Bot " + botToken)
 	if err != nil {
+		fmt.Println("Error creating Discord session: ", err)
 		log.Fatal(err)
 		return
 	}
@@ -39,14 +40,15 @@ func main() {
 	dg.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 	err = dg.Open()
 	if err != nil {
+		fmt.Println("Error opening connection: ", err)
 		log.Fatal(err)
 		return
 	}
 
-	utils.BotStartTime = time.Now()
+	// utils.BotStartTime = time.Now()
 	bitly.BitlyToken = os.Getenv("BITLY_TOKEN")
 
-	dg.UpdateStatus(0, "$maru")
+	// dg.UpdateStatus(0, "$maru")
 
 	fmt.Println("Bot is running.")
 	defer func() {
@@ -105,16 +107,25 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if messageArgs[0] == "$avatar" && len(m.Mentions) == 1 {
 		s.ChannelMessageSend(m.ChannelID, m.Mentions[0].AvatarURL("512"))
 	} else if messageArgs[0] == "$short" && len(messageArgs) == 2 {
-
-		// client := &http.Client{}
 		shortURL, err := bitly.GetShortURL(messageArgs[1], bitlyEndPoint)
 		if err != nil {
 			s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
 		}
 		s.ChannelMessageSend(m.ChannelID, shortURL)
 	} else if messageArgs[0] == "$activity" && len(messageArgs) == 2 {
-		s.UpdateStatus(0, messageArgs[1])
 		s.ChannelMessageSend(m.ChannelID, ":white_check_mark: ")
+	} else if messageArgs[0] == "$tetris" && len(messageArgs) == 2 {
+		userInfo, err := tetrio.GetUserInfo(messageArgs[1])
+		if err != nil {
+			s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
+		}
+
+		userInfoEmbed := tetrio.GetUserInfoEmbed(userInfo)
+		s.ChannelMessageSendEmbed(m.ChannelID, &userInfoEmbed)
+
+		streamInfo := tetrio.GetStreamInfo(userInfo.ID)
+		s.ChannelMessageSendEmbed(m.ChannelID, &streamInfo)
+		fmt.Println("tetris")
 	} else if ok, _ := regexp.MatchString("^\\$.+", m.Content); ok {
 		s.ChannelMessageSend(m.ChannelID, "<:LizeCry:734715144323727451>")
 	}
